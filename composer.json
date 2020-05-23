@@ -1,7 +1,7 @@
 {
     "name": "jorpo/specification",
     "description": "Simple specification pattern implementation.",
-    "type": "concerto-library",
+    "type": "library",
     "license": "GNU GPLv3",
     "authors": [
         {
