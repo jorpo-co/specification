@@ -4,32 +4,16 @@ namespace Jorpo\Specification;
 
 class AndSpecification extends AbstractSpecification
 {
-    /**
-     * @var Specification
-     */
-    private $specificationOne;
+    private Specification $specificationOne;
+    private Specification $specificationTwo;
 
-    /**
-     * @var Specification
-     */
-    private $specificationTwo;
-
-    /**
-     * Create a new AND specification based on two other spec.
-     *
-     * @param Specification $specificationOne
-     * @param Specification $specificationTwo
-     */
     public function __construct(Specification $specificationOne, Specification $specificationTwo)
     {
         $this->specificationOne = $specificationOne;
         $this->specificationTwo = $specificationTwo;
     }
 
-    /**
-     * @inherit
-     */
-    public function isSatisfiedBy(object $object): bool
+    public function isSatisfiedBy($object): bool
     {
         return $this->specificationOne->isSatisfiedBy($object) && $this->specificationTwo->isSatisfiedBy($object);
     }

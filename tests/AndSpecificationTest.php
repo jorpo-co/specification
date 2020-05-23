@@ -37,7 +37,6 @@ class AndSpecificationTest extends TestCase
     public function testShouldAddOtherSpecifications()
     {
         $alwaysTrueSpecification = new AlwaysTrueSpecification;
-        $alwaysFalseSpecification = new AlwaysFalseSpecification;
 
         $subject = $this->createInstanceWith($alwaysTrueSpecification, $alwaysTrueSpecification);
         $this->assertInstanceOf(AndSpecification::class, $subject->and($alwaysTrueSpecification));

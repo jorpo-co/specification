@@ -4,9 +4,6 @@ namespace Jorpo\Specification;
 
 class AlwaysTrueSpecification extends AbstractSpecification
 {
-    /**
-     * @inherit
-     */
     public function isSatisfiedBy($object): bool
     {
         return true;
