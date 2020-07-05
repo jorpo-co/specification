@@ -4,7 +4,7 @@ namespace Jorpo\Specification;
 
 abstract class AbstractSpecification implements Specification
 {
-    abstract public function isSatisfiedBy($object): bool;
+    abstract public function isSatisfiedBy(object $object): bool;
 
     public function and(Specification $specification): Specification
     {
