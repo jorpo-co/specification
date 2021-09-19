@@ -2,8 +2,15 @@
 
 namespace Jorpo\Specification;
 
+/**
+ * @template TObject of object
+ * @implements Specification<TObject>
+ */
 abstract class AbstractSpecification implements Specification
 {
+    /**
+     * @param TObject $object
+     */
     abstract public function isSatisfiedBy(object $object): bool;
 
     public function and(Specification $specification): Specification
