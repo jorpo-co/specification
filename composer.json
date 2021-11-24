@@ -2,7 +2,7 @@
     "name": "jorpo/specification",
     "description": "Simple specification pattern implementation.",
     "type": "library",
-    "license": "GNU GPLv3",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "John Porter",
