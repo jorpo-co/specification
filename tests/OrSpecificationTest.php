@@ -2,41 +2,42 @@
 
 namespace Jorpo\Specification;
 
-use StdClass;
+use BadMethodCallException;
 use PHPUnit\Framework\TestCase;
+use StdClass;
 
 class OrSpecificationTest extends TestCase
 {
     public function testShouldCreateInstance()
     {
         $subject = $this->createInstanceWith(
-            new AlwaysTrueSpecification,
-            new AlwaysTrueSpecification
+            new AlwaysTrueSpecification(),
+            new AlwaysTrueSpecification()
         );
         $this->assertInstanceOf(Specification::class, $subject);
     }
 
     public function testShouldBeSatisfiedBy()
     {
-        $alwaysTrueSpecification = new AlwaysTrueSpecification;
-        $alwaysFalseSpecification = new AlwaysFalseSpecification;
+        $alwaysTrueSpecification = new AlwaysTrueSpecification();
+        $alwaysFalseSpecification = new AlwaysFalseSpecification();
 
         $subject = $this->createInstanceWith($alwaysTrueSpecification, $alwaysTrueSpecification);
-        $this->assertTrue($subject->isSatisfiedBy(new StdClass));
+        $this->assertTrue($subject->isSatisfiedBy(new StdClass()));
 
         $subject = $this->createInstanceWith($alwaysFalseSpecification, $alwaysTrueSpecification);
-        $this->assertTrue($subject->isSatisfiedBy(new StdClass));
+        $this->assertTrue($subject->isSatisfiedBy(new StdClass()));
 
         $subject = $this->createInstanceWith($alwaysTrueSpecification, $alwaysFalseSpecification);
-        $this->assertTrue($subject->isSatisfiedBy(new StdClass));
+        $this->assertTrue($subject->isSatisfiedBy(new StdClass()));
 
         $subject = $this->createInstanceWith($alwaysFalseSpecification, $alwaysFalseSpecification);
-        $this->assertFalse($subject->isSatisfiedBy(new StdClass));
+        $this->assertFalse($subject->isSatisfiedBy(new StdClass()));
     }
 
     public function testShouldAddOtherSpecifications()
     {
-        $alwaysTrueSpecification = new AlwaysTrueSpecification;
+        $alwaysTrueSpecification = new AlwaysTrueSpecification();
 
         $subject = $this->createInstanceWith($alwaysTrueSpecification, $alwaysTrueSpecification);
         $this->assertInstanceOf(AndSpecification::class, $subject->and($alwaysTrueSpecification));
@@ -48,8 +49,30 @@ class OrSpecificationTest extends TestCase
         $this->assertInstanceOf(NotSpecification::class, $subject->not($alwaysTrueSpecification));
     }
 
-    private function createInstanceWith(Specification $specificationOne, Specification $specificationTwo): OrSpecification
+    public function testRequiresTwoOrMoreSpecifications(): void
     {
-        return new OrSpecification($specificationOne, $specificationTwo);
+        $this->expectException(BadMethodCallException::class);
+        $this->createInstanceWith(
+            new AlwaysTrueSpecification()
+        );
+    }
+
+    public function testThatMultipleSpecificationsCanBeChained(): void
+    {
+        $alwaysFalseSpecification = new AlwaysFalseSpecification();
+        $alwaysTrueSpecification = new AlwaysTrueSpecification();
+
+        $subject = $this->createInstanceWith(
+            $alwaysFalseSpecification,
+            $alwaysFalseSpecification,
+            $alwaysTrueSpecification
+        );
+
+        $this->assertTrue($subject->isSatisfiedBy(new StdClass()));
+    }
+
+    private function createInstanceWith(Specification ...$specifications): OrSpecification
+    {
+        return new OrSpecification(...$specifications);
     }
 }

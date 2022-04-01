@@ -2,19 +2,31 @@
 
 namespace Jorpo\Specification;
 
+use BadMethodCallException;
+
 class OrSpecification extends AbstractSpecification
 {
-    private Specification $specificationOne;
-    private Specification $specificationTwo;
+    private const PATTERN = '$this->specifications[%d]->isSatisfiedBy($object)';
 
-    public function __construct(Specification $specificationOne, Specification $specificationTwo)
+    private array $specifications;
+
+    public function __construct(Specification ...$specifications)
     {
-        $this->specificationOne = $specificationOne;
-        $this->specificationTwo = $specificationTwo;
+        if (2 > count($specifications)) {
+            throw new BadMethodCallException('Two or more Specifications are required.');
+        }
+
+        $this->specifications = $specifications;
     }
 
     public function isSatisfiedBy($object): bool
     {
-        return $this->specificationOne->isSatisfiedBy($object) || $this->specificationTwo->isSatisfiedBy($object);
+        $executable = '';
+
+        foreach ($this->specifications as $key => $specification) {
+            $executable .= ' || ' . sprintf(self::PATTERN, $key);
+        }
+
+        return eval('return ' . ltrim($executable, '| ') . ';');
     }
 }
